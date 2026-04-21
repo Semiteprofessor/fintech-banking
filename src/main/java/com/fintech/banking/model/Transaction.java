@@ -1,5 +1,6 @@
 package com.fintech.banking.model;
 
+import com.fintech.banking.constants.TransactionStatus;
 import com.fintech.banking.constants.TransactionType;
 import jakarta.persistence.*;
 import lombok.Data;
