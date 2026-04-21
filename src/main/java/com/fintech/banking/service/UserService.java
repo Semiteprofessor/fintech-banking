@@ -4,6 +4,7 @@ import com.fintech.banking.dto.RegisterRequest;
 import com.fintech.banking.dto.UserResponse;
 import com.fintech.banking.model.User;
 import com.fintech.banking.repository.UserRepository;
+import com.fintech.banking.security.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +22,10 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserResponse register(RegisterRequest request) {
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    public String register(RegisterRequest request) {
 
         if (repository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists");
@@ -32,21 +36,23 @@ public class UserService {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
 
-        // 🔐 HASH PASSWORD
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        // 📧 EMAIL VERIFICATION TOKEN
         user.setVerificationToken(UUID.randomUUID().toString());
         user.setVerified(false);
 
-        User savedUser = repository.save(user);
+        repository.save(user);
 
-        // TODO: send verification email here
+        // TODO: send verification email
 
-        return getUserResponse(savedUser);
+        // 🔐 return JWT immediately OR after verification (your choice)
+        return jwtUtil.generateToken(user.getEmail());
     }
 
-    public UserResponse login(String email, String password) {
+    // =========================
+    // LOGIN (NOW RETURNS JWT)
+    // =========================
+    public String login(String email, String password) {
 
         User user = repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
@@ -59,21 +65,22 @@ public class UserService {
             throw new RuntimeException("Email not verified");
         }
 
-        // TODO: generate JWT token here
-
-        return getUserResponse(user);
+        // 🔐 GENERATE JWT TOKEN
+        return jwtUtil.generateToken(user.getEmail());
     }
 
     // =========================
-    // LOGOUT (JWT-based systems invalidate token on client side)
+    // LOGOUT (JWT SYSTEM)
     // =========================
     public String logout(String userId) {
         log.info("User logged out: {}", userId);
-        return "Logout successful (client should delete token)";
+
+        // NOTE: JWT cannot be invalidated unless blacklist system exists
+        return "Logout successful (client must delete token)";
     }
 
     // =========================
-    // VERIFY EMAIL
+    // EMAIL VERIFICATION
     // =========================
     public String verifyEmail(String token) {
 
@@ -101,9 +108,9 @@ public class UserService {
 
         repository.save(user);
 
-        // TODO: send email with reset token
+        // TODO: send email
 
-        return "Password reset link sent to email";
+        return "Password reset link sent";
     }
 
     // =========================
@@ -134,7 +141,7 @@ public class UserService {
     }
 
     // =========================
-    // CHECK USER EXISTS
+    // VALIDATION
     // =========================
     public Boolean existByUserId(String userId) {
         log.info("Validating user: {}", userId);
@@ -142,7 +149,7 @@ public class UserService {
     }
 
     // =========================
-    // RESPONSE MAPPING
+    // MAPPER
     // =========================
     private UserResponse getUserResponse(User user) {
 
