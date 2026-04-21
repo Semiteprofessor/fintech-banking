@@ -38,14 +38,16 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        user.setVerificationToken(UUID.randomUUID().toString());
+        String token = UUID.randomUUID().toString();
+        user.setVerificationToken(token);
         user.setVerified(false);
 
         repository.save(user);
 
-        // TODO: send verification email
+        // 📧 SEND EMAIL HERE
+        emailService.sendVerificationEmail(user.getEmail(), token);
 
-        return jwtUtil.generateToken(user.getEmail());
+        return "User registered successfully. Please check your email to verify account.";
     }
 
     public String login(String email, String password) {
@@ -61,13 +63,9 @@ public class UserService {
             throw new RuntimeException("Email not verified");
         }
 
-        // 🔐 GENERATE JWT TOKEN
         return jwtUtil.generateToken(user.getEmail());
     }
 
-    // =========================
-    // LOGOUT (JWT SYSTEM)
-    // =========================
     public String logout(String userId) {
         log.info("User logged out: {}", userId);
 
@@ -75,9 +73,6 @@ public class UserService {
         return "Logout successful (client must delete token)";
     }
 
-    // =========================
-    // EMAIL VERIFICATION
-    // =========================
     public String verifyEmail(String token) {
 
         User user = repository.findByVerificationToken(token)
@@ -91,9 +86,6 @@ public class UserService {
         return "Email verified successfully";
     }
 
-    // =========================
-    // FORGOT PASSWORD
-    // =========================
     public String forgotPassword(String email) {
 
         User user = repository.findByEmail(email)
@@ -109,9 +101,6 @@ public class UserService {
         return "Password reset link sent";
     }
 
-    // =========================
-    // RESET PASSWORD
-    // =========================
     public String resetPassword(String token, String newPassword) {
 
         User user = repository.findByResetPasswordToken(token)
@@ -125,9 +114,6 @@ public class UserService {
         return "Password reset successful";
     }
 
-    // =========================
-    // PROFILE
-    // =========================
     public UserResponse getUserProfile(String userId) {
 
         User user = repository.findById(userId)
@@ -136,21 +122,15 @@ public class UserService {
         return getUserResponse(user);
     }
 
-    // =========================
-    // VALIDATION
-    // =========================
     public Boolean existByUserId(String userId) {
         log.info("Validating user: {}", userId);
         return repository.existsById(userId);
     }
 
-    // =========================
-    // MAPPER
-    // =========================
     private UserResponse getUserResponse(User user) {
 
         UserResponse response = new UserResponse();
-        response.setId(user.getId());
+        response.setId(user.getUserId());
         response.setFirstName(user.getFirstName());
         response.setLastName(user.getLastName());
         response.setEmail(user.getEmail());
