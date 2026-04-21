@@ -91,13 +91,11 @@ public class UserService {
         User user = repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 🔐 generate reset token
         String resetToken = UUID.randomUUID().toString();
         user.setResetPasswordToken(resetToken);
 
         repository.save(user);
 
-        // 📧 send reset email
         emailService.sendPasswordResetEmail(user.getEmail(), resetToken);
 
         return "Password reset link sent to your email";
