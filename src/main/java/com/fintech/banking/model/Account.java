@@ -23,7 +23,7 @@ public class Account {
     private String accountId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     @Column(unique = true, nullable = false)

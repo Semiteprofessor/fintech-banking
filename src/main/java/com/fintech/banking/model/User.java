@@ -20,7 +20,7 @@ public class User {
     private String firstName;
     private String lastName;
 
-    // Optional: link back to accounts
+
     @OneToMany(mappedBy = "user")
     private List<Account> accounts;
 }
