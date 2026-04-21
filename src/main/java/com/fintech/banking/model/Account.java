@@ -9,7 +9,12 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "accounts")
+@Table(
+        name = "accounts",
+        indexes = {
+                @Index(name = "idx_account_number", columnList = "accountNumber")
+        }
+)
 @Data
 public class Account {
 
@@ -17,8 +22,9 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String accountId;
 
-    @Column(nullable = false)
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(unique = true, nullable = false)
     private String accountNumber;
@@ -32,6 +38,9 @@ public class Account {
 
     @Column(nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
+
+    @Column(nullable = false)
+    private String currency = "NGN";
 
     @CreationTimestamp
     private LocalDateTime createdAt;
