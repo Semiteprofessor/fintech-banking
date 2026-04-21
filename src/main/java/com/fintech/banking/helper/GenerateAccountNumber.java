@@ -7,13 +7,11 @@ public class GenerateAccountNumber {
 
     private static final SecureRandom random = new SecureRandom();
 
-    private static final String BANK_CODE = "044";
+    public static String generateAccountNumber(long id) {
+        String bankCode = "044";
+        String branchCode = "123";
+        String uniquePart = String.format("%07d", id);
 
-    public static String generateAccountNumber() {
-
-        String branchCode = String.format("%03d", random.nextInt(1000));
-        String uniquePart = String.format("%07d", random.nextInt(10_000_000));
-
-        return BANK_CODE + " " + branchCode + " " + uniquePart;
+        return bankCode + " " + branchCode + " " + uniquePart;
     }
 }
