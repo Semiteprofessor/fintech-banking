@@ -32,4 +32,40 @@ public class Account {
     public Integer getAccountId() {
         return accountId;
     }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Integer getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(Integer accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getAccountName() {
+        return  accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
 }
