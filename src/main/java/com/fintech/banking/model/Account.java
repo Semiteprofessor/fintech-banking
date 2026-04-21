@@ -68,4 +68,30 @@ public class Account {
     public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updateAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updateAt) {
+        this.updateAt = updateAt;
+    }
+
+
 }
