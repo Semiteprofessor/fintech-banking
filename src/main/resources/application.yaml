@@ -24,10 +24,15 @@ spring:
           auth: true
           starttls:
             enable: true
+  web:
+    error:
+      whitelabel:
+        enabled: true
 
 server:
   address: 127.0.0.1
-  port: 8076
-  error:
-    whitelabel:
-      enabled: false
+  port: 8899
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000   # 1 day in ms

@@ -46,9 +46,6 @@ public class UserService {
         return getUserResponse(savedUser);
     }
 
-    // =========================
-    // LOGIN
-    // =========================
     public UserResponse login(String email, String password) {
 
         User user = repository.findByEmail(email)
