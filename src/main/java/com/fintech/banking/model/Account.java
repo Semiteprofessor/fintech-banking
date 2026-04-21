@@ -1,5 +1,6 @@
 package com.fintech.banking.model;
 
+import com.fintech.banking.constants.AccountType;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;

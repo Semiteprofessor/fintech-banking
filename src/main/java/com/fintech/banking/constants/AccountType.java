@@ -1,4 +1,4 @@
-package com.fintech.banking.model;
+package com.fintech.banking.constants;
 
 public enum AccountType {
     SAVINGS,
