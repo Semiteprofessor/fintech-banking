@@ -49,9 +49,6 @@ public class UserService {
         return jwtUtil.generateToken(user.getEmail());
     }
 
-    // =========================
-    // LOGIN (NOW RETURNS JWT)
-    // =========================
     public String login(String email, String password) {
 
         User user = repository.findByEmail(email)

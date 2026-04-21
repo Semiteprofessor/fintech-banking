@@ -26,26 +26,14 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // =========================
-    // EMAIL VERIFICATION
-    // =========================
     private String verificationToken;
     private boolean verified = false;
 
-    // =========================
-    // PASSWORD RESET
-    // =========================
     private String resetPasswordToken;
 
-    // =========================
-    // RELATIONSHIP
-    // =========================
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Account> accounts;
 
-    // =========================
-    // AUDIT FIELDS
-    // =========================
     @CreationTimestamp
     private LocalDateTime createdAt;
 
