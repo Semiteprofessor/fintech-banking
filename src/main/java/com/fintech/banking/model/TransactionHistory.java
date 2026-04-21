@@ -8,14 +8,14 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "payment_history")
+@Table(name = "transaction_history")
 @Data
 @Immutable
-public class PaymentHistory {
+public class TransactionHistory {
 
     @Id
-    @Column(name = "payment_id")
-    private String paymentId;
+    @Column(name = "transaction_id")
+    private String transactionId;
 
     @Column(name = "account_id")
     private String accountId;
@@ -23,17 +23,14 @@ public class PaymentHistory {
     @Column(name = "user_id")
     private String userId;
 
-    private String beneficiary;
-
-    @Column(name = "beneficiary_acc_no")
-    private String beneficiaryAccNo;
+    @Column(name = "transaction_type")
+    private String transactionType;
 
     private BigDecimal amount;
 
-    private String status;
+    private String source;
 
-    @Column(name = "reference_no")
-    private String referenceNo;
+    private String status;
 
     @Column(name = "reason_code")
     private String reasonCode;
