@@ -6,15 +6,13 @@ public class GenerateAccountNumber {
 
     private static final SecureRandom random = new SecureRandom();
 
-    public static String generateAccountNumber(long id) {
+    public static String generateAccountNumber() {
 
         String bankCode = "044";
         String branchCode = "123";
 
-        long randomPart = 1000000000L + random.nextInt(900000000);
+        long number = 1000000000L + (long)(Math.random() * 9000000000L);
 
-        String uniquePart = String.valueOf(randomPart);
-
-        return bankCode + " " + branchCode + " " + uniquePart;
+        return bankCode + " " + branchCode + " " + number;
     }
 }

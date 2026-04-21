@@ -1,5 +1,7 @@
 package com.fintech.banking.service;
 
+import com.fintech.banking.constants.AccountType;
+import com.fintech.banking.helper.GenerateAccountNumber;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.model.User;
 import com.fintech.banking.repository.AccountRepository;
@@ -19,9 +21,6 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
 
-    // =========================
-    // CREATE ACCOUNT
-    // =========================
     public Account createAccount(String userId, String accountName, String accountType) {
 
         User user = userRepository.findById(userId)
@@ -30,10 +29,11 @@ public class AccountService {
         Account account = new Account();
         account.setUser(user);
         account.setAccountName(accountName);
-        account.setAccountType(accountType);
+        account.setAccountType(AccountType.SAVINGS);
 
-        // 🔢 Generate account number
-        account.setAccountNumber(generateAccountNumber());
+        account.setAccountNumber(
+                GenerateAccountNumber.generateAccountNumber()
+        );
 
         // 💰 default balance
         account.setBalance(BigDecimal.ZERO);
@@ -93,18 +93,5 @@ public class AccountService {
         accountRepository.save(receiver);
 
         return "Transfer successful";
-    }
-
-    // =========================
-    // ACCOUNT NUMBER GENERATOR
-    // =========================
-    private String generateAccountNumber() {
-
-        // Example: 044 123 4567890
-        String bankCode = "044";
-        int middle = (int) (Math.random() * 900 + 100); // 3 digits
-        long last = (long) (Math.random() * 9000000000L + 1000000000L); // 10 digits
-
-        return bankCode + " " + middle + " " + last;
     }
 }
