@@ -45,7 +45,6 @@ public class UserService {
 
         // TODO: send verification email
 
-        // 🔐 return JWT immediately OR after verification (your choice)
         return jwtUtil.generateToken(user.getEmail());
     }
 
