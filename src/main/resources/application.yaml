@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: fintech-banking
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/banking
+    username: postgres
+    password: '@Rancho.dev'
+    driver-class-name: org.postgresql.Driver
+
+  mail:
+    username: deep041999@gmail.com
+    password: omkrydlcovltlcay
+    host: smtp.gmail.com
+    port: 587
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  address: 127.0.0.1
+  port: 8076
+  error:
+    whitelabel:
+      enabled: false
