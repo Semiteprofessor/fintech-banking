@@ -25,6 +25,8 @@ public class UserService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    private EmailService emailService;
+
     public String register(RegisterRequest request) {
 
         if (repository.existsByEmail(request.getEmail())) {
@@ -44,7 +46,6 @@ public class UserService {
 
         repository.save(user);
 
-        // 📧 SEND EMAIL HERE
         emailService.sendVerificationEmail(user.getEmail(), token);
 
         return "User registered successfully. Please check your email to verify account.";
@@ -69,7 +70,6 @@ public class UserService {
     public String logout(String userId) {
         log.info("User logged out: {}", userId);
 
-        // NOTE: JWT cannot be invalidated unless blacklist system exists
         return "Logout successful (client must delete token)";
     }
 
