@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -105,9 +106,15 @@ public class PaymentService {
         );
     }
 
-    public boolean validateAccount(String accountNumber) {
+    public Map<String, Object> validateAccount(String accountNumber) {
 
-        return accountRepository.findByAccountNumber(accountNumber)
-                .isPresent();
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        return Map.of(
+                "valid", true,
+                "accountName", account.getAccountName(),
+                "accountNumber", account.getAccountNumber()
+        );
     }
 }
