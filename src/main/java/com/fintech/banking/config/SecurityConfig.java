@@ -28,7 +28,10 @@ public class SecurityConfig {
                                 "/api/users/login",
                                 "/api/users/verify",
                                 "/api/users/forgot-password",
-                                "/api/users/reset-password"
+                                "/api/users/reset-password",
+                                "/api/payments/deposit",
+                                "/api/payments/transfer",
+                                "/api/payments/transfer"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );

@@ -143,4 +143,29 @@ public class PaymentService {
 
         return "Deposit successful";
     }
+
+    public String withdraw(String accountId, BigDecimal amount) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        if (account.getBalance().compareTo(amount) < 0) {
+            throw new RuntimeException("Insufficient balance");
+        }
+
+        account.setBalance(account.getBalance().subtract(amount));
+        accountRepository.save(account);
+
+        Transaction tx = new Transaction();
+        tx.setAccount(account);
+        tx.setTransactionType(TransactionType.DEBIT);
+        tx.setAmount(amount);
+        tx.setChannel("WITHDRAWAL");
+        tx.setStatus(TransactionStatus.SUCCESS);
+        tx.setReference(UUID.randomUUID().toString());
+        tx.setBalanceAfter(account.getBalance());
+
+        transactionRepository.save(tx);
+
+        return "Withdrawal successful";
+    }
 }
