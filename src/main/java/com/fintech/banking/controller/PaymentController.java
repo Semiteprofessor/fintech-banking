@@ -40,4 +40,12 @@ public class PaymentController {
                 paymentService.deposit(request)
         );
     }
+
+    @PostMapping("/withdraw")
+    public ResponseEntity<String> withdraw(@RequestBody WithdrawRequest request) {
+        return ResponseEntity.ok(paymentService.withdraw(
+                request.getAccountId(),
+                request.getAmount()
+        ));
+    }
 }
