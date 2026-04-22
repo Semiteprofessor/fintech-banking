@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,11 +35,15 @@ public class TransactionController {
     }
 
     @GetMapping("/account/{accountId}")
-    public ResponseEntity<List<Transaction>> getAccountTransactions(
-            @PathVariable String accountId) {
+    public ResponseEntity<Page<Transaction>> getAccountTransactions(
+            @PathVariable String accountId,
+            Pageable pageable,
+            Authentication authentication) {
+
+        String userId = authentication.getName();
 
         return ResponseEntity.ok(
-                transactionService.getAccountTransactions(accountId)
+                transactionService.getAccountTransactions(accountId, userId, pageable)
         );
     }
 
