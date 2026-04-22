@@ -49,10 +49,13 @@ public class TransactionController {
 
     @GetMapping("/{transactionId}")
     public ResponseEntity<Transaction> getTransaction(
-            @PathVariable String transactionId) {
+            @PathVariable String transactionId,
+            Authentication authentication) {
+
+        String userId = authentication.getName();
 
         return ResponseEntity.ok(
-                transactionService.getTransaction(transactionId)
+                transactionService.getTransaction(transactionId, userId)
         );
     }
 }

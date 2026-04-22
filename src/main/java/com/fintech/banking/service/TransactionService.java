@@ -25,7 +25,6 @@ public class TransactionService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        // 🔐 SECURITY CHECK
         if (!account.getUser().getUserId().equals(userId)) {
             throw new RuntimeException("Unauthorized access");
         }
