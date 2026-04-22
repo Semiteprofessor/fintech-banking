@@ -88,4 +88,18 @@ public class AccountService {
 
         return mapToResponse(account);
     }
+
+    private AccountResponse mapToResponse(Account account) {
+
+        AccountResponse response = new AccountResponse();
+
+        response.setAccountId(account.getAccountId());
+        response.setAccountNumber(account.getAccountNumber());
+        response.setAccountName(account.getAccountName());
+        response.setAccountType(String.valueOf(AccountType.SAVINGS));
+        response.setBalance(account.getBalance());
+        response.setCreatedAt(account.getCreatedAt());
+
+        return response;
+    }
 }
