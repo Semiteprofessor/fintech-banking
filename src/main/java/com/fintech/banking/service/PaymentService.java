@@ -2,6 +2,7 @@ package com.fintech.banking.service;
 
 import com.fintech.banking.constants.TransactionStatus;
 import com.fintech.banking.constants.TransactionType;
+import com.fintech.banking.dto.TransferRequest;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.model.Payment;
 import com.fintech.banking.model.Transaction;
@@ -86,5 +87,14 @@ public class PaymentService {
         transactionRepository.save(credit);
 
         return "Payment successful. Ref: " + reference;
+    }
+
+    public String transfer(TransferRequest request) {
+
+        return makePayment(
+                request.getFromAccountId(),
+                request.getToAccountNumber(),
+                request.getAmount()
+        );
     }
 }
