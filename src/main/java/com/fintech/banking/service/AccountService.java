@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,28 +28,21 @@ public class AccountService {
         Account account = new Account();
         account.setUser(user);
         account.setAccountName(accountName);
-        account.setAccountType(AccountType.SAVINGS);
+        account.setAccountType(AccountType.valueOf(accountType));
 
         account.setAccountNumber(
                 GenerateAccountNumber.generateAccountNumber()
         );
 
-        // 💰 default balance
         account.setBalance(BigDecimal.ZERO);
 
         return accountRepository.save(account);
     }
 
-    // =========================
-    // GET USER ACCOUNTS
-    // =========================
     public List<Account> getUserAccounts(String userId) {
-        return accountRepository.findByUser_UserId(userId);
+        return accountRepository.findByUserUserId(userId);
     }
 
-    // =========================
-    // GET BALANCE
-    // =========================
     public BigDecimal getAccountBalance(String accountId) {
 
         Account account = accountRepository.findById(accountId)
@@ -59,9 +51,6 @@ public class AccountService {
         return account.getBalance();
     }
 
-    // =========================
-    // TRANSFER MONEY
-    // =========================
     @Transactional
     public String transfer(String fromAccountNumber,
                            String toAccountNumber,
@@ -73,20 +62,16 @@ public class AccountService {
         Account receiver = accountRepository.findByAccountNumber(toAccountNumber)
                 .orElseThrow(() -> new RuntimeException("Receiver account not found"));
 
-        // ❌ prevent self transfer
         if (sender.getAccountNumber().equals(receiver.getAccountNumber())) {
             throw new RuntimeException("Cannot transfer to same account");
         }
 
-        // ❌ insufficient funds
         if (sender.getBalance().compareTo(amount) < 0) {
             throw new RuntimeException("Insufficient balance");
         }
 
-        // 💸 debit sender
         sender.setBalance(sender.getBalance().subtract(amount));
 
-        // 💸 credit receiver
         receiver.setBalance(receiver.getBalance().add(amount));
 
         accountRepository.save(sender);

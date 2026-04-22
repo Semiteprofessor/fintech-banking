@@ -1,5 +1,6 @@
 package com.fintech.banking.service;
 
+import com.fintech.banking.constants.AccountType;
 import com.fintech.banking.dto.RegisterRequest;
 import com.fintech.banking.dto.UserResponse;
 import com.fintech.banking.model.User;
@@ -26,6 +27,8 @@ public class UserService {
     private JwtUtil jwtUtil;
 
     private EmailService emailService;
+
+    private AccountService accountService;
 
     public String register(RegisterRequest request) {
 
@@ -83,7 +86,13 @@ public class UserService {
 
         repository.save(user);
 
-        return "Email verified successfully";
+        accountService.createAccount(
+                user.getUserId(),
+                user.getFirstName() + " " + user.getLastName(),
+                String.valueOf(AccountType.SAVINGS)
+        );
+
+        return "Email verified and account created successfully";
     }
 
     public String forgotPassword(String email) {
