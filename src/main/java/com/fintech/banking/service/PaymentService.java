@@ -2,6 +2,7 @@ package com.fintech.banking.service;
 
 import com.fintech.banking.constants.TransactionStatus;
 import com.fintech.banking.constants.TransactionType;
+import com.fintech.banking.dto.DepositRequest;
 import com.fintech.banking.dto.TransferRequest;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.model.Payment;
@@ -116,5 +117,30 @@ public class PaymentService {
                 "accountName", account.getAccountName(),
                 "accountNumber", account.getAccountNumber()
         );
+    }
+
+    @Transactional
+    public String deposit(DepositRequest request) {
+
+        Account account = accountRepository.findById(request.getAccountId())
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        account.setBalance(account.getBalance().add(request.getAmount()));
+
+        accountRepository.save(account);
+
+        Transaction transaction = new Transaction();
+        transaction.setAccount(account);
+        transaction.setUserId(account.getUser().getUserId());
+        transaction.setTransactionType(TransactionType.DEPOSIT);
+        transaction.setAmount(request.getAmount());
+        transaction.setChannel("DEPOSIT");
+        transaction.setStatus(TransactionStatus.SUCCESS);
+        transaction.setReference(UUID.randomUUID().toString());
+        transaction.setBalanceAfter(account.getBalance());
+
+        transactionRepository.save(transaction);
+
+        return "Deposit successful";
     }
 }
