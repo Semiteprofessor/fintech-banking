@@ -1,20 +1,21 @@
 spring:
   application:
     name: fintech-banking
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/banking
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/banking
-    username: postgres
-    password: '@Rancho.dev'
-    driver-class-name: org.postgresql.Driver
-
   mail:
-    username: deep041999@gmail.com
-    password: omkrydlcovltlcay
+    username: ${EMAIL_USER}
+    password: ${EMAIL_PASSWORD}
     host: smtp.gmail.com
     port: 587
     default-encoding: UTF-8
@@ -24,6 +25,7 @@ spring:
           auth: true
           starttls:
             enable: true
+
   web:
     error:
       whitelabel:
@@ -32,6 +34,9 @@ spring:
 server:
   port: 8899
 
+app:
+  base-url: http://localhost:8899
+
 jwt:
   secret: ${JWT_SECRET}
-  expiration: 86400000   # 1 day in ms
+  expiration: 86400000
