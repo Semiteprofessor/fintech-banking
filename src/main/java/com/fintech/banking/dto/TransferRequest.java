@@ -13,8 +13,8 @@ public class TransferRequest {
     @NotBlank(message = "Source account is required")
     private String sourceAccountId;
 
-    @NotBlank(message = "Destination account is required")
-    private String destinationAccountId;
+    @NotBlank(message = "Destination account number is required")
+    private String destinationAccountNumber;
 
     @NotNull(message = "Amount is required")
     @DecimalMin(value = "1.0", message = "Amount must be greater than 0")

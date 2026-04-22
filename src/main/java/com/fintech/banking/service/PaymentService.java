@@ -91,10 +91,23 @@ public class PaymentService {
 
     public String transfer(TransferRequest request) {
 
+        Account sender = accountRepository.findById(request.getSourceAccountId())
+                .orElseThrow(() -> new RuntimeException("Sender account not found"));
+
+        Account beneficiary = accountRepository.findByAccountNumber(
+                request.getDestinationAccountNumber()
+        ).orElseThrow(() -> new RuntimeException("Beneficiary account not found"));
+
         return makePayment(
-                request.getFromAccountId(),
-                request.getToAccountNumber(),
+                sender.getAccountNumber(),
+                beneficiary.getAccountNumber(),
                 request.getAmount()
         );
+    }
+
+    public boolean validateAccount(String accountNumber) {
+
+        return accountRepository.findByAccountNumber(accountNumber)
+                .isPresent();
     }
 }
