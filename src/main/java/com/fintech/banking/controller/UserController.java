@@ -16,17 +16,11 @@ public class UserController {
 
     private final UserService userService;
 
-    // =========================
-    // REGISTER
-    // =========================
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(userService.register(request));
     }
 
-    // =========================
-    // LOGIN (RETURN TOKEN)
-    // =========================
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
 
@@ -37,25 +31,16 @@ public class UserController {
         );
     }
 
-    // =========================
-    // VERIFY EMAIL
-    // =========================
     @GetMapping("/verify")
     public ResponseEntity<String> verifyEmail(@RequestParam String token) {
         return ResponseEntity.ok(userService.verifyEmail(token));
     }
 
-    // =========================
-    // FORGOT PASSWORD
-    // =========================
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         return ResponseEntity.ok(userService.forgotPassword(email));
     }
 
-    // =========================
-    // RESET PASSWORD
-    // =========================
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(
             @RequestParam String token,
@@ -64,9 +49,6 @@ public class UserController {
         return ResponseEntity.ok(userService.resetPassword(token, newPassword));
     }
 
-    // =========================
-    // PROFILE
-    // =========================
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getProfile(@PathVariable String userId) {
         return ResponseEntity.ok(userService.getUserProfile(userId));
@@ -78,7 +60,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestParam String userId) {
-        return ResponseEntity.ok(userService.logout(userId));
+    public ResponseEntity<String> logout() {
+        return ResponseEntity.ok("Logout successful");
     }
 }
