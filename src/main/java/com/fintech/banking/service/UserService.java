@@ -6,6 +6,7 @@ import com.fintech.banking.dto.UserResponse;
 import com.fintech.banking.model.User;
 import com.fintech.banking.repository.UserRepository;
 import com.fintech.banking.security.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,22 +16,16 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository repository;
+    private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final EmailService emailService;
+    private final AccountService accountService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    private EmailService emailService;
-
-    private AccountService accountService;
-
-    public UserResponse register(RegisterRequest request) {
+    public String register(RegisterRequest request) {
 
         if (repository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists");
@@ -40,7 +35,6 @@ public class UserService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
-
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         String token = UUID.randomUUID().toString();
@@ -51,10 +45,10 @@ public class UserService {
 
         emailService.sendVerificationEmail(user.getEmail(), token);
 
-        return "User registered successfully. Please check your email to verify account.";
+        return "User registered successfully. Please verify your email.";
     }
 
-    public UserResponse login(String email, String password) {
+    public String login(String email, String password) {
 
         User user = repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
@@ -70,12 +64,6 @@ public class UserService {
         return jwtUtil.generateToken(user.getEmail());
     }
 
-    public String logout(String userId) {
-        log.info("User logged out: {}", userId);
-
-        return "Logout successful (client must delete token)";
-    }
-
     public String verifyEmail(String token) {
 
         User user = repository.findByVerificationToken(token)
@@ -86,13 +74,14 @@ public class UserService {
 
         repository.save(user);
 
+        // create account after verification
         accountService.createAccount(
                 user.getUserId(),
                 user.getFirstName() + " " + user.getLastName(),
                 String.valueOf(AccountType.SAVINGS)
         );
 
-        return "Email verified and account created successfully";
+        return "Email verified successfully";
     }
 
     public String forgotPassword(String email) {
@@ -107,7 +96,7 @@ public class UserService {
 
         emailService.sendPasswordResetEmail(user.getEmail(), resetToken);
 
-        return "Password reset link sent to your email";
+        return "Password reset link sent";
     }
 
     public String resetPassword(String token, String newPassword) {
@@ -132,7 +121,6 @@ public class UserService {
     }
 
     public Boolean existByUserId(String userId) {
-        log.info("Validating user: {}", userId);
         return repository.existsById(userId);
     }
 
@@ -147,5 +135,10 @@ public class UserService {
         response.setUpdatedAt(user.getUpdatedAt());
 
         return response;
+    }
+
+    public String logout(String userId) {
+        log.info("User logged out: {}", userId);
+        return "Logout successful (client should delete token)";
     }
 }
