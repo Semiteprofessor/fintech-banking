@@ -1,5 +1,6 @@
 package com.fintech.banking.controller;
 
+import com.fintech.banking.dto.DepositRequest;
 import com.fintech.banking.dto.TransferRequest;
 import com.fintech.banking.service.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,14 @@ public class PaymentController {
 
         return ResponseEntity.ok(
                 paymentService.validateAccount(accountNumber)
+        );
+    }
+
+    @PostMapping("/deposit")
+    public ResponseEntity<?> deposit(@RequestBody DepositRequest request) {
+
+        return ResponseEntity.ok(
+                paymentService.deposit(request)
         );
     }
 }
