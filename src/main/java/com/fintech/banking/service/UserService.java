@@ -30,7 +30,7 @@ public class UserService {
 
     private AccountService accountService;
 
-    public String register(RegisterRequest request) {
+    public UserResponse register(RegisterRequest request) {
 
         if (repository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists");
@@ -54,7 +54,7 @@ public class UserService {
         return "User registered successfully. Please check your email to verify account.";
     }
 
-    public String login(String email, String password) {
+    public UserResponse login(String email, String password) {
 
         User user = repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));

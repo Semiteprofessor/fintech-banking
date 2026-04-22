@@ -6,6 +6,7 @@ import com.fintech.banking.dto.UserResponse;
 import com.fintech.banking.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,13 +17,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public String register(@Valid @RequestBody RegisterRequest request) {
-        return userService.register(request);
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(userService.register(request));
     }
 
     @PostMapping("/login")
-    public String login(@Valid @RequestBody LoginRequest request) {
-        return userService.login(request.getEmail(), request.getPassword());
+    public ResponseEntity<UserResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(userService.login(request.getEmail(), request.getPassword()));
     }
 
     @GetMapping("/verify")
