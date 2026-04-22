@@ -3,6 +3,10 @@ package com.fintech.banking.controller;
 import com.fintech.banking.model.Transaction;
 import com.fintech.banking.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,11 +20,16 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Transaction>> getUserTransactions(
-            @PathVariable String userId) {
+    public ResponseEntity<Page<Transaction>> getUserTransactions(
+            @PathVariable String userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size,
+                Sort.by("createdAt").descending());
 
         return ResponseEntity.ok(
-                transactionService.getUserTransactions(userId)
+                transactionService.getUserTransactions(userId, pageable)
         );
     }
 

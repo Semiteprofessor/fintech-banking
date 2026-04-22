@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
 
+    Page<Transaction> findByUserId(String userId, Pageable pageable);
+
     Page<Transaction> findByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable);
 
     Page<Transaction> findByAccount_AccountIdOrderByCreatedAtDesc(String accountId, Pageable pageable);

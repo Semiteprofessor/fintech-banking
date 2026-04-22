@@ -17,7 +17,7 @@ public class TransactionService {
     private final AccountRepository accountRepository;
 
     public Page<Transaction> getUserTransactions(String userId, Pageable pageable) {
-        return transactionRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
+        return transactionRepository.findByUserId(userId, pageable);
     }
 
     public Page<Transaction> getAccountTransactions(String accountId, String userId, Pageable pageable) {
