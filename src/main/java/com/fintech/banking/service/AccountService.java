@@ -1,6 +1,7 @@
 package com.fintech.banking.service;
 
 import com.fintech.banking.constants.AccountType;
+import com.fintech.banking.dto.AccountResponse;
 import com.fintech.banking.helper.GenerateAccountNumber;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.model.User;
@@ -78,5 +79,13 @@ public class AccountService {
         accountRepository.save(receiver);
 
         return "Transfer successful";
+    }
+
+    public AccountResponse getAccountById(String accountId) {
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        return mapToResponse(account);
     }
 }

@@ -1,6 +1,7 @@
 package com.fintech.banking.controller;
 
 import com.fintech.banking.dto.AccountResponse;
+import com.fintech.banking.model.Account;
 import com.fintech.banking.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,8 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    // =========================
-    // CREATE ACCOUNT
-    // =========================
     @PostMapping
-    public ResponseEntity<AccountResponse> createAccount(
+    public ResponseEntity<Account> createAccount(
             @RequestParam String userId,
             @RequestParam String accountName,
             @RequestParam String accountType) {
@@ -29,11 +27,8 @@ public class AccountController {
         );
     }
 
-    // =========================
-    // GET USER ACCOUNTS
-    // =========================
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<AccountResponse>> getUserAccounts(
+    public ResponseEntity<List<Account>> getUserAccounts(
             @PathVariable String userId) {
 
         return ResponseEntity.ok(
@@ -41,9 +36,6 @@ public class AccountController {
         );
     }
 
-    // =========================
-    // GET ACCOUNT BY ID
-    // =========================
     @GetMapping("/{accountId}")
     public ResponseEntity<AccountResponse> getAccount(
             @PathVariable String accountId) {
@@ -53,16 +45,13 @@ public class AccountController {
         );
     }
 
-    // =========================
-    // GET ACCOUNT BALANCE
-    // =========================
     @GetMapping("/{accountId}/balance")
     public ResponseEntity<?> getBalance(@PathVariable String accountId) {
 
         return ResponseEntity.ok(
                 java.util.Map.of(
                         "accountId", accountId,
-                        "balance", accountService.getBalance(accountId)
+                        "balance", accountService.getAccountBalance(accountId)
                 )
         );
     }
