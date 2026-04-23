@@ -1,8 +1,8 @@
 package com.fintech.banking.controller;
 
-import com.fintech.banking.dto.LoginRequest;
-import com.fintech.banking.dto.RegisterRequest;
-import com.fintech.banking.dto.UserResponse;
+import com.fintech.banking.dto.request.LoginRequest;
+import com.fintech.banking.dto.request.RegisterRequest;
+import com.fintech.banking.dto.response.UserResponse;
 import com.fintech.banking.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

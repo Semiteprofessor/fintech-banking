@@ -1,6 +1,6 @@
 package com.fintech.banking.controller;
 
-import com.fintech.banking.dto.AccountResponse;
+import com.fintech.banking.dto.response.AccountResponse;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.service.AccountService;
 import lombok.RequiredArgsConstructor;

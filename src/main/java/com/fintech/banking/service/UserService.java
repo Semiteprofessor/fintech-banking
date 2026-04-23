@@ -1,14 +1,13 @@
 package com.fintech.banking.service;
 
 import com.fintech.banking.constants.AccountType;
-import com.fintech.banking.dto.RegisterRequest;
-import com.fintech.banking.dto.UserResponse;
+import com.fintech.banking.dto.request.RegisterRequest;
+import com.fintech.banking.dto.response.UserResponse;
 import com.fintech.banking.model.User;
 import com.fintech.banking.repository.UserRepository;
 import com.fintech.banking.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

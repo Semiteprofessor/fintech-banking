@@ -1,7 +1,7 @@
 package com.fintech.banking.service;
 
 import com.fintech.banking.constants.AccountType;
-import com.fintech.banking.dto.AccountResponse;
+import com.fintech.banking.dto.response.AccountResponse;
 import com.fintech.banking.helper.GenerateAccountNumber;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.model.User;

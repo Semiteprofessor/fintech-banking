@@ -1,4 +1,4 @@
-package com.fintech.banking.dto;
+package com.fintech.banking.dto.response;
 
 import lombok.Data;
 

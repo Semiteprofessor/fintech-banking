@@ -2,8 +2,8 @@ package com.fintech.banking.service;
 
 import com.fintech.banking.constants.TransactionStatus;
 import com.fintech.banking.constants.TransactionType;
-import com.fintech.banking.dto.DepositRequest;
-import com.fintech.banking.dto.TransferRequest;
+import com.fintech.banking.dto.request.DepositRequest;
+import com.fintech.banking.dto.request.TransferRequest;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.model.Payment;
 import com.fintech.banking.model.Transaction;
