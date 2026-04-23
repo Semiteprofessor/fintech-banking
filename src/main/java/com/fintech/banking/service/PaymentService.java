@@ -132,7 +132,7 @@ public class PaymentService {
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
         transaction.setUserId(account.getUser().getUserId());
-        transaction.setTransactionType(TransactionType.DEPOSIT);
+        transaction.setTransactionType(TransactionType.CREDIT);
         transaction.setAmount(request.getAmount());
         transaction.setChannel("DEPOSIT");
         transaction.setStatus(TransactionStatus.SUCCESS);
@@ -167,5 +167,13 @@ public class PaymentService {
         transactionRepository.save(tx);
 
         return "Withdrawal successful";
+    }
+
+    public BigDecimal getAccountBalance(String accountId) {
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        return account.getBalance();
     }
 }
