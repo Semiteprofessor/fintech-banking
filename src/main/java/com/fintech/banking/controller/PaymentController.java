@@ -50,9 +50,4 @@ public class PaymentController {
                 request.getAmount()
         ));
     }
-
-    @GetMapping("/balance/{accountId}")
-    public ResponseEntity<BalanceResponse> getBalance(@PathVariable String accountId) {
-        return ResponseEntity.ok(paymentService.checkBalance(accountId));
-    }
 }

@@ -2,6 +2,7 @@ package com.fintech.banking.service;
 
 import com.fintech.banking.constants.AccountType;
 import com.fintech.banking.dto.response.AccountResponse;
+import com.fintech.banking.dto.response.BalanceResponse;
 import com.fintech.banking.helper.GenerateAccountNumber;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.model.User;
@@ -99,6 +100,21 @@ public class AccountService {
         response.setAccountType(String.valueOf(AccountType.SAVINGS));
         response.setBalance(account.getBalance());
         response.setCreatedAt(account.getCreatedAt());
+
+        return response;
+    }
+
+
+
+    public BalanceResponse checkBalance(String accountId) {
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        BalanceResponse response = new BalanceResponse();
+        response.setAccountId(account.getAccountId());
+        response.setAccountNumber(account.getAccountNumber());
+        response.setBalance(account.getBalance());
 
         return response;
     }

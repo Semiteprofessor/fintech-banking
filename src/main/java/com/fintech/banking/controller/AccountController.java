@@ -1,6 +1,7 @@
 package com.fintech.banking.controller;
 
 import com.fintech.banking.dto.response.AccountResponse;
+import com.fintech.banking.dto.response.BalanceResponse;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 public class AccountController {
 
     private final AccountService accountService;
+//    private final AccountService accountService;
 
     @PostMapping
     public ResponseEntity<Account> createAccount(
@@ -45,14 +47,21 @@ public class AccountController {
         );
     }
 
-    @GetMapping("/{accountId}/balance")
-    public ResponseEntity<?> getBalance(@PathVariable String accountId) {
+//    @GetMapping("/{accountId}/balance")
+//    public ResponseEntity<?> getBalance(@PathVariable String accountId) {
+//
+//        return ResponseEntity.ok(
+//                java.util.Map.of(
+//                        "accountId", accountId,
+//                        "balance", accountService.getAccountBalance(accountId)
+//                )
+//        );
+//    }
 
-        return ResponseEntity.ok(
-                java.util.Map.of(
-                        "accountId", accountId,
-                        "balance", accountService.getAccountBalance(accountId)
-                )
-        );
+
+
+    @GetMapping("/balance/{accountId}")
+    public ResponseEntity<BalanceResponse> getBalance(@PathVariable String accountId) {
+        return ResponseEntity.ok(accountService.checkBalance(accountId));
     }
 }

@@ -169,25 +169,4 @@ public class PaymentService {
 
         return "Withdrawal successful";
     }
-
-    public BigDecimal getAccountBalance(String accountId) {
-
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
-
-        return account.getBalance();
-    }
-
-    public BalanceResponse checkBalance(String accountId) {
-
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
-
-        BalanceResponse response = new BalanceResponse();
-        response.setAccountId(account.getAccountId());
-        response.setAccountNumber(account.getAccountNumber());
-        response.setBalance(account.getBalance());
-
-        return response;
-    }
 }
