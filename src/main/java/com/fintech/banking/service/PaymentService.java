@@ -55,7 +55,7 @@ public class PaymentService {
         accountRepository.save(beneficiary);
 
         Payment payment = new Payment();
-        payment.setAccountId(sender.getAccountId());
+        payment.getAccount().getBalance();
         payment.setBeneficiary(beneficiary.getAccountName());
         payment.setBeneficiaryAccountId(beneficiary.getAccountId());
         payment.setAmount(amount);
