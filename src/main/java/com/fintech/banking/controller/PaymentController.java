@@ -3,6 +3,7 @@ package com.fintech.banking.controller;
 import com.fintech.banking.dto.request.DepositRequest;
 import com.fintech.banking.dto.request.TransferRequest;
 import com.fintech.banking.dto.request.WithdrawalRequest;
+import com.fintech.banking.dto.response.BalanceResponse;
 import com.fintech.banking.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +49,10 @@ public class PaymentController {
                 request.getAccountId(),
                 request.getAmount()
         ));
+    }
+
+    @GetMapping("/balance/{accountId}")
+    public ResponseEntity<BalanceResponse> getBalance(@PathVariable String accountId) {
+        return ResponseEntity.ok(paymentService.checkBalance(accountId));
     }
 }

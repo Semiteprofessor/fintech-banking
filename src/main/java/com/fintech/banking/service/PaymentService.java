@@ -4,6 +4,7 @@ import com.fintech.banking.constants.TransactionStatus;
 import com.fintech.banking.constants.TransactionType;
 import com.fintech.banking.dto.request.DepositRequest;
 import com.fintech.banking.dto.request.TransferRequest;
+import com.fintech.banking.dto.response.BalanceResponse;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.model.Payment;
 import com.fintech.banking.model.Transaction;
@@ -93,7 +94,7 @@ public class PaymentService {
 
     public String transfer(TransferRequest request) {
 
-        Account sender = accountRepository.findById(request.getSourceAccountId())
+        Account sender = accountRepository.findByAccountNumber(request.getSourceAccountNumber())
                 .orElseThrow(() -> new RuntimeException("Sender account not found"));
 
         Account beneficiary = accountRepository.findByAccountNumber(
@@ -175,5 +176,18 @@ public class PaymentService {
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
         return account.getBalance();
+    }
+
+    public BalanceResponse checkBalance(String accountId) {
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        BalanceResponse response = new BalanceResponse();
+        response.setAccountId(account.getAccountId());
+        response.setAccountNumber(account.getAccountNumber());
+        response.setBalance(account.getBalance());
+
+        return response;
     }
 }
