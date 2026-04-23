@@ -17,8 +17,9 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String paymentId;
 
-    @Column(nullable = false)
-    private String accountId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 
     @Column(nullable = false)
     private String beneficiary;
