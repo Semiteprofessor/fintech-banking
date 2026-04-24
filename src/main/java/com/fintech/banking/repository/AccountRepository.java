@@ -14,6 +14,7 @@ AccountRepository extends JpaRepository<Account, String> {
     Optional<Account> findByUserUserId(String userId);
 
     Optional<Account> findByAccountNumber(String accountNumber);
+    Optional<Account> findByAccountId(String accountId);
 
     boolean existsByAccountNumber(String accountNumber);
 }

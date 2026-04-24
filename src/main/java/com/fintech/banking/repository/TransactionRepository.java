@@ -16,6 +16,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
 
     Page<Transaction> findByAccount_AccountIdOrderByCreatedAtDesc(String accountId, Pageable pageable);
 
+    List<Transaction> findByAccount_AccountId(String accountId);
+
     Optional<Transaction> findByReference(String reference);
 
     Page<Transaction> findTop10ByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable);

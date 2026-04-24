@@ -57,13 +57,4 @@ public class TransactionService {
 
         return transaction;
     }
-
-    public List<Transaction> getTransactionHistory(String accountNumber) {
-
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
-
-        return transactionRepository
-                .findByAccount_AccountNumberOrderByCreatedAtDesc(account.getAccountNumber());
-    }
 }

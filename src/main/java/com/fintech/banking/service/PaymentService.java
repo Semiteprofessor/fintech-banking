@@ -5,6 +5,7 @@ import com.fintech.banking.constants.TransactionType;
 import com.fintech.banking.dto.request.DepositRequest;
 import com.fintech.banking.dto.request.TransferRequest;
 import com.fintech.banking.dto.response.BalanceResponse;
+import com.fintech.banking.dto.response.TransactionResponse;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.model.Payment;
 import com.fintech.banking.model.Transaction;
@@ -13,14 +14,17 @@ import com.fintech.banking.repository.PaymentRepository;
 import com.fintech.banking.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentService {
 
     private final AccountRepository accountRepository;
@@ -169,5 +173,30 @@ public class PaymentService {
         transactionRepository.save(tx);
 
         return "Withdrawal successful";
+    }
+
+    public List<TransactionResponse> getTransactionHistory(String accountId) {
+
+        Account account = accountRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        List<Transaction> transactions =
+                transactionRepository.findByAccount_AccountNumberOrderByCreatedAtDesc(
+                        account.getAccountNumber()
+                );
+
+        return transactions.stream()
+                .map(tx -> TransactionResponse.builder()
+                        .transactionId(tx.getTransactionId())
+                        .transactionType(tx.getTransactionType().name())
+                        .amount(tx.getAmount())
+                        .channel(tx.getChannel())
+                        .status(tx.getStatus().name())
+                        .reference(tx.getReference())
+                        .balanceAfter(tx.getBalanceAfter())
+                        .createdAt(tx.getCreatedAt())
+                        .build()
+                )
+                .toList();
     }
 }

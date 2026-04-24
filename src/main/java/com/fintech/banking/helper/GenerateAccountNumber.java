@@ -13,6 +13,6 @@ public class GenerateAccountNumber {
 
         long number = 1000000000L + (long)(Math.random() * 9000000000L);
 
-        return bankCode + " " + branchCode + " " + number;
+        return bankCode + branchCode + number;
     }
 }

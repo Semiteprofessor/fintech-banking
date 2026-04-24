@@ -50,4 +50,13 @@ public class PaymentController {
                 request.getAmount()
         ));
     }
+
+    @GetMapping("/history")
+    public ResponseEntity<?> getTransactionHistory(
+            @RequestParam String accountId) {
+
+        return ResponseEntity.ok(
+                paymentService.getTransactionHistory(accountId)
+        );
+    }
 }
