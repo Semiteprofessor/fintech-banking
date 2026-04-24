@@ -55,7 +55,7 @@ public class PaymentService {
         accountRepository.save(beneficiary);
 
         Payment payment = new Payment();
-        payment.getAccount().getBalance();
+        payment.setAccount(sender);
         payment.setBeneficiary(beneficiary.getAccountName());
         payment.setBeneficiaryAccountId(beneficiary.getAccountId());
         payment.setAmount(amount);
@@ -94,12 +94,13 @@ public class PaymentService {
 
     public String transfer(TransferRequest request) {
 
-        Account sender = accountRepository.findByAccountNumber(request.getSourceAccountNumber())
+        Account sender = accountRepository
+                .findByAccountNumber(request.getSourceAccountNumber())
                 .orElseThrow(() -> new RuntimeException("Sender account not found"));
 
-        Account beneficiary = accountRepository.findByAccountNumber(
-                request.getDestinationAccountNumber()
-        ).orElseThrow(() -> new RuntimeException("Beneficiary account not found"));
+        Account beneficiary = accountRepository
+                .findByAccountNumber(request.getDestinationAccountNumber())
+                .orElseThrow(() -> new RuntimeException("Beneficiary account not found"));
 
         return makePayment(
                 sender.getAccountNumber(),

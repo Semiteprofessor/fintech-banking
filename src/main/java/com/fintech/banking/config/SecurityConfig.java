@@ -31,12 +31,12 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
+                        // PUBLIC ENDPOINTS
                         .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/payments/**").permitAll()
+                        .requestMatchers("/api/accounts/**").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/api/accounts/balance/**").permitAll()
-
-                        .requestMatchers(HttpMethod.POST, "/api/payments/**").permitAll()
-
+                        // EVERYTHING ELSE
                         .anyRequest().authenticated()
                 );
 

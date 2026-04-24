@@ -19,10 +19,8 @@ public class PaymentController {
     @PostMapping("/transfer")
     public ResponseEntity<?> transfer(@RequestBody TransferRequest request) {
 
-        String response = paymentService.transfer(request);
-
         return ResponseEntity.ok(
-                java.util.Map.of("message", response)
+                paymentService.transfer(request)
         );
     }
 
