@@ -3,6 +3,7 @@ package com.fintech.banking.service;
 import com.fintech.banking.constants.TransactionStatus;
 import com.fintech.banking.constants.TransactionType;
 import com.fintech.banking.dto.request.BillPaymentRequest;
+import com.fintech.banking.dto.response.BillPaymentResponse;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.model.BillPayment;
 import com.fintech.banking.model.Transaction;
@@ -68,8 +69,22 @@ public class BillPaymentService {
         return request.getBillType() + " payment successful";
     }
 
-    public List<BillPayment> getBillHistory(String accountId) {
+    public List<BillPaymentResponse> getBillHistory(String accountId) {
+
         return billPaymentRepository
-                .findByAccount_AccountIdOrderByCreatedAtDesc(accountId);
+                .findByAccount_AccountIdOrderByCreatedAtDesc(accountId)
+                .stream()
+                .map(bill -> BillPaymentResponse.builder()
+                        .billPaymentId(bill.getBillPaymentId())
+                        .billType(bill.getBillType().name())
+                        .provider(bill.getProvider())
+                        .customerReference(bill.getCustomerReference())
+                        .amount(bill.getAmount())
+                        .status(bill.getStatus())
+                        .reference(bill.getReference())
+                        .createdAt(bill.getCreatedAt())
+                        .build()
+                )
+                .toList();
     }
 }
