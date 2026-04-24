@@ -41,8 +41,11 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    public List<Account> getUserAccounts(String userId) {
-        return accountRepository.findByUserUserId(userId);
+    public AccountResponse getUserAccounts(String userId) {
+        Account account = accountRepository.findByUserUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        return mapToResponse(account);
     }
 
     public BigDecimal getAccountBalance(String accountId) {

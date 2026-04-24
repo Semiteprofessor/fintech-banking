@@ -30,7 +30,7 @@ public class AccountController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Account>> getUserAccounts(
+    public ResponseEntity<AccountResponse> getUserAccounts(
             @PathVariable String userId) {
 
         return ResponseEntity.ok(

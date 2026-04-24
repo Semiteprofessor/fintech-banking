@@ -73,7 +73,6 @@ public class UserService {
 
         repository.save(user);
 
-        // create account after verification
         accountService.createAccount(
                 user.getUserId(),
                 user.getFirstName() + " " + user.getLastName(),
@@ -130,6 +129,7 @@ public class UserService {
         response.setFirstName(user.getFirstName());
         response.setLastName(user.getLastName());
         response.setEmail(user.getEmail());
+        response.setPassword(user.getPassword());
         response.setCreatedAt(user.getCreatedAt());
         response.setUpdatedAt(user.getUpdatedAt());
 

@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TransactionService {
@@ -54,5 +56,14 @@ public class TransactionService {
         }
 
         return transaction;
+    }
+
+    public List<Transaction> getTransactionHistory(String accountNumber) {
+
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        return transactionRepository
+                .findByAccount_AccountNumberOrderByCreatedAtDesc(account.getAccountNumber());
     }
 }
