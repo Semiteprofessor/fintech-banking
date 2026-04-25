@@ -1,11 +1,16 @@
 package com.fintech.banking.service;
 
+import com.fintech.banking.constants.LoanType;
+import com.fintech.banking.constants.TransactionStatus;
+import com.fintech.banking.constants.TransactionType;
 import com.fintech.banking.dto.request.LoanRequest;
 import com.fintech.banking.dto.response.LoanResponse;
 import com.fintech.banking.model.Account;
 import com.fintech.banking.model.Loan;
+import com.fintech.banking.model.Transaction;
 import com.fintech.banking.repository.AccountRepository;
 import com.fintech.banking.repository.LoanRepository;
+import com.fintech.banking.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,21 +26,36 @@ public class LoanService {
 
     private final LoanRepository loanRepository;
     private final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
 
     public LoanResponse applyLoan(LoanRequest request) {
 
         Account account = accountRepository.findById(request.getAccountId())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        BigDecimal interestRate = new BigDecimal("0.10"); // 10%
-        BigDecimal totalRepayment = request.getAmount()
-                .add(request.getAmount().multiply(interestRate));
+        BigDecimal interestRate;
+        BigDecimal totalRepayment;
+
+        if (request.getLoanType() == LoanType.ISLAMIC) {
+
+            // No interest (Sharia compliant)
+            interestRate = BigDecimal.ZERO;
+            totalRepayment = request.getAmount();
+
+        } else {
+
+            // Conventional loan
+            interestRate = new BigDecimal("0.10"); // 10%
+            totalRepayment = request.getAmount()
+                    .add(request.getAmount().multiply(interestRate));
+        }
 
         Loan loan = new Loan();
         loan.setAccount(account);
         loan.setAmount(request.getAmount());
         loan.setInterestRate(interestRate);
         loan.setTotalRepayment(totalRepayment);
+        loan.setLoanType(request.getLoanType());
         loan.setStatus("PENDING");
         loan.setCreatedAt(LocalDateTime.now());
         loan.setDueDate(LocalDateTime.now().plusMonths(1));
@@ -54,13 +75,29 @@ public class LoanService {
             throw new RuntimeException("Loan already processed");
         }
 
-        Account account = loan.getAccount();
+        Account account = accountRepository.findById(loan.getAccount().getAccountId())
+                .orElseThrow(() -> new RuntimeException("Account not found"));
 
+        // ✅ Add loan amount to balance
         account.setBalance(account.getBalance().add(loan.getAmount()));
+        accountRepository.save(account);
 
         loan.setStatus("APPROVED");
+        loanRepository.save(loan);
 
-        return "Loan approved and disbursed";
+        Transaction tx = new Transaction();
+        tx.setAccount(account);
+        tx.setUserId(account.getUser().getUserId());
+        tx.setTransactionType(TransactionType.CREDIT);
+        tx.setAmount(loan.getAmount());
+        tx.setChannel("LOAN");
+        tx.setStatus(TransactionStatus.SUCCESS);
+        tx.setReference(UUID.randomUUID().toString());
+        tx.setBalanceAfter(account.getBalance());
+
+        transactionRepository.save(tx);
+
+        return "Loan approved and disbursed successfully";
     }
 
     @Transactional

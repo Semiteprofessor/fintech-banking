@@ -70,6 +70,7 @@ public class PaymentService {
         paymentRepository.save(payment);
 
         Transaction debit = new Transaction();
+        debit.setTransactionId(UUID.randomUUID().toString());
         debit.setAccount(sender);
         debit.setUserId(sender.getUser().getUserId());
         debit.setTransactionType(TransactionType.DEBIT);
@@ -82,6 +83,7 @@ public class PaymentService {
         transactionRepository.save(debit);
 
         Transaction credit = new Transaction();
+        credit.setTransactionId(UUID.randomUUID().toString()); // UNIQUE
         credit.setAccount(beneficiary);
         credit.setUserId(beneficiary.getUser().getUserId());
         credit.setTransactionType(TransactionType.CREDIT);
