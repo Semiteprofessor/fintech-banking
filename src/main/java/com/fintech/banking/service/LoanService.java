@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -85,5 +86,25 @@ public class LoanService {
         }
 
         return "Loan repayment successful";
+    }
+
+    public List<LoanResponse> getLoans(String accountId) {
+
+        return loanRepository.findByAccount_AccountId(accountId)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    private LoanResponse mapToResponse(Loan loan) {
+        return LoanResponse.builder()
+                .loanId(loan.getLoanId())
+                .amount(loan.getAmount())
+                .interestRate(loan.getInterestRate())
+                .totalRepayment(loan.getTotalRepayment())
+                .status(loan.getStatus())
+                .dueDate(loan.getDueDate())
+                .createdAt(loan.getCreatedAt())
+                .build();
     }
 }
