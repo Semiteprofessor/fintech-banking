@@ -24,7 +24,6 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String transactionId;
 
-    // 🔥 Prevent infinite JSON loop
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false)
     @JsonIgnore

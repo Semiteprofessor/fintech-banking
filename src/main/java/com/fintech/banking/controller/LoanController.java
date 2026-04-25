@@ -35,8 +35,8 @@ public class LoanController {
         );
     }
 
-    @GetMapping("/history")
-    public ResponseEntity<?> history(@RequestParam String accountId) {
+    @GetMapping("/history/{accountId}")
+    public ResponseEntity<?> loanHistory(@PathVariable String accountId) {
         return ResponseEntity.ok(
                 loanService.getLoans(accountId)
         );
