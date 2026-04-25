@@ -1,5 +1,6 @@
 package com.fintech.banking.model;
 
+import com.fintech.banking.constants.LoanType;
 import com.fintech.banking.model.Account;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -22,6 +23,9 @@ public class Loan {
     private BigDecimal amount;
     private BigDecimal interestRate;
     private BigDecimal totalRepayment;
+
+    @Enumerated(EnumType.STRING)
+    private LoanType loanType;
 
     private String status; // PENDING, APPROVED, REJECTED, PAID
 

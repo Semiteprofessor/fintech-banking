@@ -1,6 +1,6 @@
 package com.fintech.banking.constants;
 
-enum LoanType {
+public enum LoanType {
     CONVENTIONAL,   // with interest
     ISLAMIC         // no interest
 }
