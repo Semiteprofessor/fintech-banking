@@ -61,4 +61,29 @@ public class LoanService {
 
         return "Loan approved and disbursed";
     }
+
+    @Transactional
+    public String repayLoan(String loanId, BigDecimal amount) {
+
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new RuntimeException("Loan not found"));
+
+        Account account = loan.getAccount();
+
+        if (account.getBalance().compareTo(amount) < 0) {
+            throw new RuntimeException("Insufficient balance");
+        }
+
+        account.setBalance(account.getBalance().subtract(amount));
+
+        BigDecimal remaining = loan.getTotalRepayment().subtract(amount);
+
+        if (remaining.compareTo(BigDecimal.ZERO) <= 0) {
+            loan.setStatus("PAID");
+        } else {
+            loan.setTotalRepayment(remaining);
+        }
+
+        return "Loan repayment successful";
+    }
 }
